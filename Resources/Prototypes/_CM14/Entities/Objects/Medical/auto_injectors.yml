@@ -38,6 +38,10 @@
   - type: MedicallyUnskilledDoAfter
   - type: UseDelay
     delay: 0.333
+  - type: IconLabel
+    textSize: 4
+    textColor: White
+    storedOffset: -27, -7
 
 - type: entity
   parent: CMAutoInjector
@@ -73,6 +77,8 @@
   - type: MedicallyUnskilledDoAfter
     min: 0
     doAfter: 0
+  - type: IconLabel
+    labelTextLocId: cm-emergency-medicine-container-label-text
 
 - type: entity
   parent: CMAutoInjector
@@ -90,6 +96,8 @@
   - type: CMRefillableSolution
     reagents:
       CMTricordrazine: 45
+  - type: IconLabel
+    labelTextLocId: cm-tricordazine-container-label-text
 
 - type: entity
   parent: CMTricordrazineAutoInjector
@@ -119,6 +127,8 @@
   - type: CMRefillableSolution
     reagents:
       CMTricordrazine: 15
+  - type: IconLabel
+    labelTextLocId: cm-first-aid-container-label-text
 
 - type: entity
   parent: CMAutoInjector
@@ -136,6 +146,8 @@
   - type: CMRefillableSolution
     reagents:
       CMKelotane: 45
+  - type: IconLabel
+    labelTextLocId: cm-kelotane-container-label-text
 
 - type: entity
   parent: CMAutoInjector
@@ -155,7 +167,8 @@
   - type: CMRefillableSolution
     reagents:
       CMDexalinPlus: 3
-
+  - type: IconLabel
+    labelTextLocId: cm-dexalin-plus-container-label-text
 # TODO CM14 tramadol
 
 - type: entity
@@ -174,7 +187,8 @@
   - type: CMRefillableSolution
     reagents:
       CMBicaridine: 45
-
+  - type: IconLabel
+    labelTextLocId: cm-bicaridine-container-label-text
 - type: entity
   parent: CMAutoInjector
   id: CMInaprovalineAutoInjector
@@ -193,6 +207,8 @@
   - type: CMRefillableSolution
     reagents:
       CMInaprovaline: 90
+  - type: IconLabel
+    labelTextLocId: cm-inaprovaline-container-label-text
 
 # TODO CM14 oxycodone
 
@@ -214,3 +230,5 @@
   - type: CMRefillableSolution
     reagents:
       CMEpinephrine: 15.75
+  - type: IconLabel
+    labelTextLocId: cm-epinephrine-container-label-text

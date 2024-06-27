@@ -9,5 +9,14 @@ namespace Content.Shared._CM14.IconLabel;
 public sealed partial class IconLabelComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public string LabelText = string.Empty;
+    public LocId LabelTextLocId = string.Empty;
+
+    [DataField, AutoNetworkedField]
+    public int TextSize = 8;
+
+    [DataField, AutoNetworkedField]
+    public String TextColor = "Black";
+
+    [DataField, AutoNetworkedField]
+    public Vector2i StoredOffset = new(0, 0);
 }

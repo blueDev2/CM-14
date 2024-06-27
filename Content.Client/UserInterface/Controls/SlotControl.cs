@@ -1,15 +1,23 @@
 using System.Numerics;
 using Content.Client.Cooldown;
 using Content.Client.UserInterface.Systems.Inventory.Controls;
+using Content.Shared._CM14.IconLabel;
+using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.Themes;
 using Robust.Shared.Input;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.UserInterface.Controls
 {
     [Virtual]
     public abstract class SlotControl : Control, IEntityControl
     {
+        [Dependency] private readonly IEntityManager _entities = default!;
+        [Dependency] private readonly IPrototypeManager _prototype = default!;
+
         public static int DefaultButtonSize = 64;
 
         public TextureRect ButtonRect { get; }
@@ -18,6 +26,10 @@ namespace Content.Client.UserInterface.Controls
         public SpriteView HoverSpriteView { get; }
         public TextureButton StorageButton { get; }
         public CooldownGraphic CooldownDisplay { get; }
+        public Label IconLabel { get; }
+
+        //private readonly Font _font;
+
 
         private SpriteView SpriteView { get; }
 
@@ -118,18 +130,31 @@ namespace Content.Client.UserInterface.Controls
         public SlotControl()
         {
             IoCManager.InjectDependencies(this);
+
+            //var cache = IoCManager.Resolve<IResourceCache>();
+            //_font = new VectorFont(cache.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf"), 8);
+
             Name = "SlotButton_null";
             MinSize = new Vector2(DefaultButtonSize, DefaultButtonSize);
+
             AddChild(ButtonRect = new TextureRect
             {
                 TextureScale = new Vector2(2, 2),
-                MouseFilter = MouseFilterMode.Stop
+                MouseFilter = MouseFilterMode.Stop,
             });
             AddChild(HighlightRect = new TextureRect
             {
                 Visible = false,
                 TextureScale = new Vector2(2, 2),
                 MouseFilter = MouseFilterMode.Ignore
+            });
+            AddChild(IconLabel = new Label
+            {
+                Text = "TI",
+                SetSize = new Vector2(1f, 1f),
+                HorizontalAlignment = HAlignment.Right,
+                VerticalAlignment = VAlignment.Center,
+                Visible = true,
             });
 
             ButtonRect.OnKeyBindDown += OnButtonPressed;
@@ -156,6 +181,24 @@ namespace Content.Client.UserInterface.Controls
                 VerticalAlignment = VAlignment.Bottom,
                 Visible = false,
             });
+
+
+            /**
+            if (_entities.TryGetComponent(Entity, out IconLabelComponent? iconLabel))
+            {
+                if (Loc.TryGetString(iconLabel.LabelTextLocId, out String? labelText))
+                {
+                    IconLabel.Text = labelText;
+                }
+
+                if (Color.TryFromName(iconLabel.TextColor, out Robust.Shared.Maths.Color color))
+                {
+                    IconLabel.FontColorOverride = color;
+                }
+
+                IconLabel.SetSize = new Vector2(iconLabel.TextSize);
+            }
+            **/
 
             StorageButton.OnKeyBindDown += args =>
             {
@@ -259,6 +302,36 @@ namespace Content.Client.UserInterface.Controls
             HighlightRect.Texture = Theme.ResolveTextureOrNull(_highlightTexturePath)?.Texture;
             UpdateButtonTexture();
         }
+
+        /**protected override void Draw(DrawingHandleScreen handle)
+        {
+            if (_entities.TryGetComponent(Entity, out IconLabelComponent? iconLabel))
+            {
+                if (!Loc.TryGetString(iconLabel.LabelTextLocId, out string? msg))
+                {
+                    return;
+                }
+
+                var textColor = Color.Black;
+                Color.TryFromName(iconLabel.TextColor, out textColor);
+
+
+                var charArray = msg.ToCharArray();
+                var charPosition = Position;
+                charPosition.X += iconLabel.Xoffset;
+                charPosition.Y += iconLabel.Yoffset;
+
+                var textSize = iconLabel.TextSize;
+
+                float sep = 0;
+                foreach (var chr in charArray)
+                {
+                    charPosition.X += sep;
+                    sep = _font.DrawChar(handle, new System.Text.Rune(chr), charPosition, textSize, textColor);
+                }
+            }
+            base.Draw(handle);
+        }**/
 
         EntityUid? IEntityControl.UiEntity => Entity;
     }

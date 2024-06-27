@@ -1,9 +1,11 @@
 using System.Numerics;
 using Content.Client.Items.Systems;
+using Content.Shared._CM14.IconLabel;
 using Content.Shared.Item;
 using Content.Shared.Storage;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.CustomControls;
 
@@ -19,6 +21,7 @@ public sealed class ItemGridPiece : Control, IEntityControl
     public readonly EntityUid Entity;
     public ItemStorageLocation Location;
     public ItemGridPieceMarks? Marked;
+    private Font _font;
 
     public event Action<GUIBoundKeyEventArgs, ItemGridPiece>? OnPiecePressed;
     public event Action<GUIBoundKeyEventArgs, ItemGridPiece>? OnPieceUnpressed;
@@ -51,6 +54,10 @@ public sealed class ItemGridPiece : Control, IEntityControl
     public ItemGridPiece(Entity<ItemComponent> entity, ItemStorageLocation location,  IEntityManager entityManager)
     {
         IoCManager.InjectDependencies(this);
+
+        // Prepare Font for the icon label
+        var cache = IoCManager.Resolve<IResourceCache>();
+        _font = new VectorFont(cache.GetResource<FontResource>("/Fonts/NotoSans/NotoSans-Regular.ttf"), 8);
 
         _entityManager = entityManager;
         _storageController = UserInterfaceManager.GetUIController<StorageUIController>();
@@ -210,6 +217,31 @@ public sealed class ItemGridPiece : Control, IEntityControl
             if (markedTexture != null)
             {
                 handle.DrawTextureRect(markedTexture, new UIBox2(markedPos, markedPos + size));
+            }
+        }
+
+        if (_entityManager.TryGetComponent(Entity, out IconLabelComponent? iconLabel))
+        {
+            if (!Loc.TryGetString(iconLabel.LabelTextLocId, out string? msg))
+            {
+                return;
+            }
+
+            var textColor = Color.Black;
+            Color.TryFromName(iconLabel.TextColor, out textColor);
+
+
+            var charArray = msg.ToCharArray();
+            var iconLabelPosition = new Vector2((boundingGrid.Width + 1) * size.X * 2 + iconLabel.StoredOffset.X * 2,
+    (boundingGrid.Height + 1) * size.Y * 2 + iconLabel.StoredOffset.Y * 2);
+
+            var textSize = iconLabel.TextSize;
+
+            float sep = 0;
+            foreach (var chr in charArray)
+            {
+                iconLabelPosition.X += sep;
+                sep = _font.DrawChar(handle, new System.Text.Rune(chr), iconLabelPosition, textSize, textColor);
             }
         }
     }

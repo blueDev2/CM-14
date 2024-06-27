@@ -36,3 +36,15 @@ reagent-desc-cmleporazine = A drug used to treat hypothermia and hyperthermia. S
 
 reagent-name-cmtricordrazine = Tricordrazine
 reagent-desc-cmtricordrazine = Tricordrazine is a highly potent stimulant, originally derived from cordrazine. Can be used to treat a wide range of injuries.
+
+# Medical Icon Labels
+cm-tricordazine-container-label-text = TI
+cm-bicardine-container-label-text = BI
+cm-kelotane-container-label-text = KE
+cm-dexalin-container-label-text = DX
+cm-dylovene-container-label-text = DY
+cm-inaprovaline-container-label-text = IN
+cm-first-aid-container-label-text = FA
+cm-emergency-medicine-container-label-text = EM
+cm-dexalin-plus-container-label-text = D+
+cm-epinephrine-container-label-text = EP
